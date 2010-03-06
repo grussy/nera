@@ -6,6 +6,8 @@
 #include "uart.h"
 #include "commands.h"
 #include "lcd.h"
+#include "maus.h"
+
  
 
 
@@ -16,19 +18,30 @@ unsigned long overflows, saved_overflows=0;
 void init_Interrupts( void )
 {
 	// interrupt on change on INT0 and INT1
-	MCUCR = (0<<ISC01) |(1<<ISC00) | (0<<ISC11) | (1<<ISC10);
+	MCUCR = (0<<ISC01) |(1<<ISC00);
 	// turn on interrupts!
-	GIMSK  |= (1<<INT0)|(1<<INT1);
+	GIMSK  |= (1<<INT0);
 }
 
-
-
-
-
-ISR(TIMER1_OVF_vect)
+/*ISR(TIMER1_OVF_vect)
 {
 	overflows++;
-}
+}*/
+ISR(INT0_vect)
+{
+	uart_puts("[DEBUG] Entered Interrups SR\n");
+	if(mousestatus == SEND)
+	{
+		uart_puts("[DEBUG] Mousestatus was send calling mouse_sendbits() now\n");
+		mouse_sendbits();
+	}
+	else
+	{
+		uart_puts("[DEBUG] Mousestatus was not send calling getbits() now\n");
+		getbits();
+	}
+	uart_puts("[DEBUG] Exiting ISR\n");
+}	
 
 void start_Timer( void )
 {
@@ -37,13 +50,18 @@ void start_Timer( void )
 	TCCR1B |= (1<<CS10); // no prescaler, start timer
 }
 
+unsigned  char v= 0;
+signed char r=0;
+unsigned char t=0;
+
 int main(void)
 {
 	char buffer [20];
 	USART_Init();
 	lcd_init();
-
-	//init_Interrupts();
+	init_Interrupts();
+	initmaus();
+	
 	//start_Timer();
 	sei();
 
@@ -58,7 +76,8 @@ int main(void)
 
 	DDRD |= ( 1 << PD5 );
  
-	while(1) {
+	while(1)
+	{
 		//USART abfragen ob zeichen verfügbar
 		if (UCSRA & (1<<RXC)) 
 		{
@@ -67,5 +86,23 @@ int main(void)
 		}
 		
 		PORTD = PIND ^ ( 1 << PD5 );
+		/*r=(signed char)getdy();	// und gibt diese an POROTC aus 
+		if((v+r)>255)
+		{
+			v=255;
+		}
+		else
+		{
+			if((v+r)<0)
+			{
+				v=0;
+			}
+			else
+			{
+				v=v+r;
+			}
+		}
+		
+		//uart_puts(v);*/
 	}
 }
