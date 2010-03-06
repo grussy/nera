@@ -29,18 +29,18 @@ void init_Interrupts( void )
 }*/
 ISR(INT0_vect)
 {
-	uart_puts("[DEBUG] Entered Interrups SR\n");
+	//uart_puts("[DEBUG] Entered Interrups SR\n");
 	if(mousestatus == SEND)
 	{
-		uart_puts("[DEBUG] Mousestatus was send calling mouse_sendbits() now\n");
+		//uart_puts("[DEBUG] Mousestatus was send calling mouse_sendbits() now\n");
 		mouse_sendbits();
 	}
 	else
 	{
-		uart_puts("[DEBUG] Mousestatus was not send calling getbits() now\n");
+		//uart_puts("[DEBUG] Mousestatus was not send calling getbits() now\n");
 		getbits();
 	}
-	uart_puts("[DEBUG] Exiting ISR\n");
+	//uart_puts("[DEBUG] Exiting ISR\n");
 }	
 
 void start_Timer( void )
@@ -76,6 +76,8 @@ int main(void)
 
 	DDRD |= ( 1 << PD5 );
  
+	//DDRA |= (1 << PA4 );
+	
 	while(1)
 	{
 		//USART abfragen ob zeichen verfügbar
