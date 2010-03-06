@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 #define F_CPU 16000000UL
 
@@ -40,8 +41,8 @@ unsigned char initmaus(void)
 {
 	cli();
 	uart_puts("[DEBUG] Entering initmaus Interrupts disabled\n");
-	sendmaus(0xFF);			//reset
-	uart_puts("[DEBUG] CAll of sendmaus1 finished\n");
+	sendmaus(0xFF);	//reset
+	//uart_puts("[DEBUG] CAll of sendmaus1 finished\n");
 	while(mousestatus == SEND){}
 	uart_puts("[DEBUG] send trough\n");
 	while(mousestatus == RECIVE){}
@@ -70,22 +71,33 @@ unsigned char initmaus(void)
 
 unsigned char mouse_getbit(void)
 {
-	return DATAPORT & ( 1 << DATAPIN );
+	//uart_puts("[DEBUG] getbit called, bit was:\n");
+	char buffer;
+	
+
+
+	buffer =  DATAPORT & ( 1 << DATAPIN );
+	uart_puts(buffer);
+	return buffer;
 }
 
 void mouse_setbit(unsigned char bit)
 {
+	//uart_puts("[DEBUG] mouse_setbit called\n");
 	bit = bit & 0x01; // nur das erste bit  im parameter beachten 
+	DATADDR |= (1 << DATAPIN);
 	if(bit==0)
 	{
 		DATAPULL &= ~(1 << DATAPIN);
+		//uart_puts("[DEBUG] cleared bit\n");
 	}
 	else
 	{
 		DATAPULL |= (1 << DATAPIN);
+		//uart_puts("[DEBUG] set bit\n");
 		parity++;//parität errechnen;
 	}
-
+	DATADDR &= ~(1 << DATAPIN);
 }
 
 void mouse_sendbits(void) // sendet die einzelnen bits an die maus
@@ -112,7 +124,8 @@ void mouse_sendbits(void) // sendet die einzelnen bits an die maus
 		}
 		if(bitcount==10)//acknowledge abfangen
 		{
-			DATADDR &= ~(1 << DATAPIN);
+			DATADDR &= ~(1 << DATAPIN)
+;
 			mouseerror = mouse_getbit();
 			mousestatus = RECIVE;
 			bitcount = 0xff;
@@ -233,13 +246,17 @@ sendbyte=mausbyte;
 mousestatus = SEND;
 CLKPULL &= ~(1 << CLKPIN);
 DATAPULL |= (1 << DATAPIN);
-delaymy(300);
+//delaymy(300);
+_delay_ms(1000);
 DATAPULL &= ~(1 << DATAPIN);
-CLKPORT |= (1 << CLKPIN);
+//CLKPULL |= (1 << CLKPIN);
 CLKDDR &= ~(1 << CLKPIN);
-uart_puts("[DEBUG] Messing around with PINS DIRECTIONS and ... now settig Interruptflag\n");
+//CLKPULL &= ~(1 << CLKPIN);
+//uart_puts("[DEBUG] Messing around with PINS DIRECTIONS and ... now settig Interruptflag\n");
 GIFR |= (1 << INTF0); //Setze Interruptflag
-uart_puts("[DEBUG] Flag set\n");
-sei();
+//uart_puts("[DEBUG] Flag set\n");
+//sei();
+_delay_ms(20);
 uart_puts("[DEBUG] Interrupts enabled exiting sendmaus()\n");
+sei();
 }
