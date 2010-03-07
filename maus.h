@@ -41,22 +41,24 @@ unsigned char initmaus(void)
 {
 	cli();
 	uart_puts("[DEBUG] Entering initmaus Interrupts disabled\n");
-	sendmaus(0xFF);	//reset
+	sendmaus(0xF4);	//reset
 	//uart_puts("[DEBUG] CAll of sendmaus1 finished\n");
 	while(mousestatus == SEND){}
-	uart_puts("[DEBUG] send trough\n");
+	//uart_puts("[DEBUG] send trough\n");
 	while(mousestatus == RECIVE){}
-	uart_puts("[DEBUG] recive trough\n");
+	//uart_puts("[DEBUG] recive trough\n");
 	while(mousestatus == BUSY){}
 	
-	uart_puts("[DEBUG] send recive busy through\n");	
-
+	uart_puts("\nErstmal durch würde ich sagen\n");	
+	/*
 	sendmaus(0xf6);	// defaultwerte auswählen 
 	
 	while(mousestatus == SEND){}
 	while(mousestatus == RECIVE){}
 	while(mousestatus == BUSY){}	
 	
+	//uart_puts("222\n");
+
 	sendmaus(0xf4);	// protokoll einschalten 
 	
 	while(mousestatus == SEND){}
@@ -64,6 +66,8 @@ unsigned char initmaus(void)
 	while(mousestatus == BUSY){}
 	bytecount=0;
 	
+	//uart_puts("333\n");	
+	*/
 	sei();
 	return (0);
 }
@@ -85,7 +89,7 @@ void mouse_setbit(unsigned char bit)
 {
 	//uart_puts("[DEBUG] mouse_setbit called\n");
 	bit = bit & 0x01; // nur das erste bit  im parameter beachten 
-	DATADDR |= (1 << DATAPIN);
+	//DATADDR |= (1 << DATAPIN);
 	if(bit==0)
 	{
 		DATAPULL &= ~(1 << DATAPIN);
@@ -97,17 +101,19 @@ void mouse_setbit(unsigned char bit)
 		//uart_puts("[DEBUG] set bit\n");
 		parity++;//parität errechnen;
 	}
-	DATADDR &= ~(1 << DATAPIN);
+	//DATADDR &= ~(1 << DATAPIN);
+	//uart_puts("1");
 }
 
 void mouse_sendbits(void) // sendet die einzelnen bits an die maus
 {
-	char buffer[12];
-	sprintf(buffer, "%u\n", bitcount);
-	uart_puts("[DEBUG]Bitcount in mouse_sendbits");
-	uart_puts(buffer);
+	//char buffer[12];
+	//sprintf(buffer, "%u\n", bitcount);
+	//uart_puts("[DEBUG]Bitcount in mouse_sendbits");
+	//uart_puts(buffer);
 	if(bitcount<8)		//bits setzen und dann um eine position nach rechts schieben
 	{
+		_delay_us(80);
 		mouse_setbit(sendbyte);
 		sendbyte=sendbyte/2;
 	}
@@ -115,17 +121,20 @@ void mouse_sendbits(void) // sendet die einzelnen bits an die maus
 	{
 		if(bitcount==8) //paritäts bit setzen 
 		{
+			_delay_us(85);
 		 	mouse_setbit(~parity);
 		 	parity=0;
 		}
 		if(bitcount==9)//stopbit setzen
 		{
+			_delay_us(80);
 			 mouse_setbit(0x01);
 		}
 		if(bitcount==10)//acknowledge abfangen
 		{
-			DATADDR &= ~(1 << DATAPIN)
-;
+			
+			DATADDR &= ~(1 << DATAPIN);
+			_delay_us(80);
 			mouseerror = mouse_getbit();
 			mousestatus = RECIVE;
 			bitcount = 0xff;
@@ -141,17 +150,21 @@ void getbits(void) // liest die einzelnen bits zu sammen und fast sie zu einem b
 	if(bitcount==0)
 	{
 		mousestatus = BUSY;
+		_delay_us(80);
 	}
 	else
 	{
 		if(bitcount<9)
 		{
+			_delay_us(80);
 			recivebyte=recivebyte|(mouse_getbit()<<(bitcount-1));
+			
 		}
 	 	else
 	 	{
 		  	if(bitcount==9)
-		  	{
+		  	{	
+				_delay_us(80);
 		  		parity=mouse_getbit();
 		  		recivedbyte=recivebyte;
 		  	}
@@ -240,23 +253,25 @@ uart_puts("[DEBUG] Just entered sendmaus() Interrupts disabled\n");
 bytecount=0;
 bitcount=0;
 
-DATADDR |= (1 << DATAPIN);
+DATADDR &= ~(1 << DATAPIN);
 CLKDDR |= (1 << CLKPIN);
 sendbyte=mausbyte;
 mousestatus = SEND;
 CLKPULL &= ~(1 << CLKPIN);
-DATAPULL |= (1 << DATAPIN);
-//delaymy(300);
-_delay_ms(1000);
 DATAPULL &= ~(1 << DATAPIN);
+delaymy(300);
+_delay_us(550);
+DATADDR |= (1 << DATAPIN);
+DATAPULL &= ~(1 << DATAPIN);
+_delay_us(200);
 //CLKPULL |= (1 << CLKPIN);
 CLKDDR &= ~(1 << CLKPIN);
-//CLKPULL &= ~(1 << CLKPIN);
+CLKPULL &= ~(1 << CLKPIN);
 //uart_puts("[DEBUG] Messing around with PINS DIRECTIONS and ... now settig Interruptflag\n");
-GIFR |= (1 << INTF0); //Setze Interruptflag
+//GIFR |= (1 << INTF0); //Setze Interruptflag
 //uart_puts("[DEBUG] Flag set\n");
 //sei();
-_delay_ms(20);
-uart_puts("[DEBUG] Interrupts enabled exiting sendmaus()\n");
+//_delay_ms(20);
+//uart_puts("[DEBUG] Interrupts enabled exiting sendmaus()\n");
 sei();
 }
