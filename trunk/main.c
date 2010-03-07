@@ -29,15 +29,19 @@ void init_Interrupts( void )
 }*/
 ISR(INT0_vect)
 {
-	//uart_puts("[DEBUG] Entered Interrups SR\n");
+	
+	
+	//sei();
 	if(mousestatus == SEND)
 	{
 		//uart_puts("[DEBUG] Mousestatus was send calling mouse_sendbits() now\n");
+		uart_puts("S");
 		mouse_sendbits();
 	}
 	else
 	{
 		//uart_puts("[DEBUG] Mousestatus was not send calling getbits() now\n");
+		uart_puts("G");
 		getbits();
 	}
 	//uart_puts("[DEBUG] Exiting ISR\n");
