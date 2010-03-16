@@ -1,4 +1,11 @@
 #include "commands.h"
+
+// WIZARD CODE Do not edit the lines below.
+// Otherwise the wizard may be unable to reread the settings.
+// WIZARD SEVEN_SEGMENT_WIZARD 23104567
+char segmentsc[] = { 0x3f, 0x5, 0x5e, 0x4f, 0x65, 0x6b, 0x7b,
+                    0xd, 0x7f, 0x6f };
+// END OF WIZARD CODE
 void identify_command()
 {
 	char command[17];      // String mit maximal 12 zeichen 
@@ -36,6 +43,24 @@ void identify_command()
   		while (uart_gets( lcdtext, sizeof( lcdtext )));
 		set_cursor(0,2);
 		lcd_string(lcdtext);
+	}
+		else if	( strcmp( command, "CLK" ) == 0 )
+	{
+		segmentDataClk();
+		uart_puts(command);
+	}
+		else if	( strcmp( command, "STR" ) == 0 )
+	{
+		segmentStorageClk();
+		uart_puts(command);
+	}
+		else if	( strcmp( command, "7" ) == 0 )
+	{
+		uart_puts("Type a number < 10...\n");
+		char ledtext[2];      // String mit maximal 1 zeichen 
+  		while (uart_gets( ledtext, sizeof( ledtext )));
+		unsigned int number = atoi(ledtext);
+		segmentSetNumber(number);
 	}
 	else if (strcmp( command, "HELP" ) == 0 )
 	{
