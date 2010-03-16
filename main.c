@@ -6,14 +6,14 @@
 #include "uart.h"
 #include "commands.h"
 #include "lcd.h"
-#include "maus.h"
+#include "segment.h"
 
- 
 
 
 int int1, int2 = 0;
 unsigned int saved_timer = 0;
 unsigned long overflows, saved_overflows=0;
+
 
 void init_Interrupts( void )
 {
@@ -27,25 +27,7 @@ void init_Interrupts( void )
 {
 	overflows++;
 }*/
-ISR(INT0_vect)
-{
-	
-	
-	//sei();
-	if(mousestatus == SEND)
-	{
-		//uart_puts("[DEBUG] Mousestatus was send calling mouse_sendbits() now\n");
-		uart_puts("S");
-		mouse_sendbits();
-	}
-	else
-	{
-		//uart_puts("[DEBUG] Mousestatus was not send calling getbits() now\n");
-		uart_puts("G");
-		getbits();
-	}
-	//uart_puts("[DEBUG] Exiting ISR\n");
-}	
+
 
 void start_Timer( void )
 {
@@ -53,6 +35,7 @@ void start_Timer( void )
 	TCCR1A &= ~((1 << COM1A1)|(1<<COM1B1)|(1 << COM1A0)|(1<<COM1B0)); // normal Mode
 	TCCR1B |= (1<<CS10); // no prescaler, start timer
 }
+
 
 unsigned  char v= 0;
 signed char r=0;
@@ -62,25 +45,26 @@ int main(void)
 {
 	char buffer [20];
 	USART_Init();
-	lcd_init();
-	init_Interrupts();
-	initmaus();
+	//lcd_init();
+	//init_Interrupts();
+	//initmaus();
 	
 	//start_Timer();
 	sei();
 
-	lcd_data('T');
-    	lcd_data('e');
-    	lcd_data('s');
-    	lcd_data('t');
+	
  
     	set_cursor(0,2);
  
-    	lcd_string("Hello World!");
+    	//lcd_string("Hello World!");
 
 	DDRD |= ( 1 << PD5 );
  
 	//DDRA |= (1 << PA4 );
+	initSegment();
+	
+	segmentSetNumber(2);
+
 	
 	while(1)
 	{
