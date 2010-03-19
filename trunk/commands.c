@@ -22,10 +22,15 @@ void identify_command()
 		PORTD = PIND ^ ( 1 << PD6 );
 		uart_puts(command);
 	}
-	else if	( strcmp( command, "LED2" ) == 0 )
+	else if	( strcmp( command, "L" ) == 0 )
 	{
-		DDRD |= ( 1 << PD5 );
-		PORTD = PIND ^ ( 1 << PD5 );
+		pwmInc();
+		uart_puts(command);
+	}
+		else if	( strcmp( command, "FET" ) == 0 )
+	{
+		DDRA |= ( 1 << PA7 );
+		PORTA = PINA ^ ( 1 << PA7 );
 		uart_puts(command);
 	}
 	else if	( strcmp( command, "LCDW1" ) == 0 )

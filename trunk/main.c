@@ -28,12 +28,27 @@ void init_Interrupts( void )
 	overflows++;
 }*/
 
-
-void start_Timer( void )
+void pwmSet( unsigned int number )
 {
-	TIMSK |= (1 << TOIE1); // enable Interrupt on Overlow
-	TCCR1A &= ~((1 << COM1A1)|(1<<COM1B1)|(1 << COM1A0)|(1<<COM1B0)); // normal Mode
-	TCCR1B |= (1<<CS10); // no prescaler, start timer
+	//stop Timer
+	//TCCR1B &= ~(1<<CS10);
+	//set PWM
+	
+	OCR1A++;
+
+}
+
+void pwmInc ( void )
+{
+	OCR1A = OCR1A + 10;
+}
+
+void init_Timer( void )
+{
+	TCCR1A |= (1<<COM1A1) | (1<<WGM10);
+	TCCR1B |= (1<<WGM12) | (1<<WGM11) | (1<<CS10);
+
+	OCR1A = 0x0200;
 }
 
 
@@ -49,7 +64,7 @@ int main(void)
 	//init_Interrupts();
 	//initmaus();
 	
-	//start_Timer();
+	init_Timer();
 	sei();
 
 	
@@ -74,8 +89,8 @@ int main(void)
 			//uart_puts("zeichen vorhanden\n");
 			identify_command();
 		}
-		
-		PORTD = PIND ^ ( 1 << PD5 );
+		//pwmInc();
+		//PORTD = PIND ^ ( 1 << PD5 );
 		/*r=(signed char)getdy();	// und gibt diese an POROTC aus 
 		if((v+r)>255)
 		{
