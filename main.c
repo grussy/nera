@@ -23,32 +23,49 @@ void init_Interrupts( void )
 	GIMSK  |= (1<<INT0);
 }
 
-/*ISR(TIMER1_OVF_vect)
+ISR(TIMER0_OVF_vect)
 {
-	overflows++;
-}*/
+	if (OCR1A < 1023)
+	{
+		OCR1A++;
+		OCR1B++;
+	}
+	else
+	{
+		OCR1A = 0;
+		OCR1B = 0;
+
+	}
+}
 
 void pwmSet( unsigned int number )
 {
 	//stop Timer
 	//TCCR1B &= ~(1<<CS10);
 	//set PWM
-	
-	OCR1A++;
+	if (OCR1A < 1023)
+	{
+		OCR1A++;
+	}
 
 }
 
 void pwmInc ( void )
 {
+	
 	OCR1A = OCR1A + 10;
 }
 
 void init_Timer( void )
 {
-	TCCR1A |= (1<<COM1A1) | (1<<WGM10);
-	TCCR1B |= (1<<WGM12) | (1<<WGM11) | (1<<CS10);
+	TCCR0 |= (1<<CS02); //timer0 langsam
+	TIMSK |= (1<<TOIE0); // interrupt on timer 0 overflow
+	TCCR1A |= (1<<COM1A1) | (1<<WGM10) | (1<<WGM11);
+	TCCR1A |= (1<<COM1B0) | (1<<COM1B1);
+	TCCR1B |= (1<<WGM12) | (1<<CS10);
 
-	OCR1A = 0x0200;
+	OCR1A = 0;
+	OCR1B = 0;
 }
 
 
