@@ -159,6 +159,17 @@ void init_ADC(void)
 	
 }
 
+void takePhoto(void)
+{
+	PORTA &= ~(1<<PA0);
+	_delay_ms(2000);
+	PORTA &= ~(1<<PA1);
+	_delay_ms(500);
+	PORTA |= (1<<PA0) | (1<<PA1);
+	
+	uart_puts("I took a Photo!\n");
+}
+
 
 unsigned  char v= 0;
 signed char r=0;
@@ -166,37 +177,15 @@ unsigned char t=0;
 
 int main(void)
 {
+	
+	DDRA |= (1<<PA0) | (1<<PA1);
+	PORTA |= (1<<PA0) | (1<<PA1);
+
+
 	char buffer [20];
 	USART_Init();
-	lcd_init();
-	init_Interrupts();
-	init_ADC();
-	//initmaus();
-	int32_t val = 0;
- 
-	encode_init();	
-	//init_Timer();
+	
 	sei();
-
-	
- 
-    	set_cursor(0,2);
- 
-    	lcd_string("Hello World!");
-
-	set_cursor(0,1);
-
-	DDRD |= ( 1 << PD5 );
-	DDRB = 0xFF;
-	DDRC |= (1<<PC0) | (1<<PC1);
-	
-	dac(400);
- 
-	//DDRA |= (1 << PA4 );
-	//initSegment();
-	
-	//segmentSetNumber(2);
-
 	
 	while(1)
 	{
@@ -206,42 +195,5 @@ int main(void)
 			//uart_puts("zeichen vorhanden\n");
 			identify_command();
 		}
-
-
-
-		val += encode_read2();
-		dac(val);
-		sprintf(buffer, "Out: %u          ", val);
-		set_cursor(0,1);
-		lcd_string(buffer);
-
-		if (adc_ready)
-		{
-			set_cursor(0,2);
-			sprintf(buffer, "In: %u          ", adc);
-			lcd_string(buffer);
-			ADCSRA |= (1<<ADSC); // Start ADConversion
-			adc_ready = 0;
-		}
-		//pwmInc();
-		//PORTD = PIND ^ ( 1 << PD5 );
-		/*r=(signed char)getdy();	// und gibt diese an POROTC aus 
-		if((v+r)>255)
-		{
-			v=255;
-		}
-		else
-		{
-			if((v+r)<0)
-			{
-				v=0;
-			}
-			else
-			{
-				v=v+r;
-			}
-		}
-		
-		//uart_puts(v);*/
 	}
 }
