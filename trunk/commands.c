@@ -22,12 +22,12 @@ void identify_command()
 		PORTD = PIND ^ ( 1 << PD6 );
 		uart_puts(command);
 	}
-	else if	( strcmp( command, "L" ) == 0 )
+	else if	( strcmp( command, "photo" ) == 0 )
 	{
-		pwmInc();
 		uart_puts(command);
+		takePhoto();
 	}
-		else if	( strcmp( command, "FET" ) == 0 )
+	else if	( strcmp( command, "FET" ) == 0 )
 	{
 		DDRA |= ( 1 << PA7 );
 		PORTA = PINA ^ ( 1 << PA7 );
@@ -49,17 +49,7 @@ void identify_command()
 		set_cursor(0,2);
 		lcd_string(lcdtext);
 	}
-		else if	( strcmp( command, "CLK" ) == 0 )
-	{
-		segmentDataClk();
-		uart_puts(command);
-	}
-		else if	( strcmp( command, "STR" ) == 0 )
-	{
-		segmentStorageClk();
-		uart_puts(command);
-	}
-		else if	( strcmp( command, "7" ) == 0 )
+	else if	( strcmp( command, "7" ) == 0 )
 	{
 		uart_puts("Type a number < 10...\n");
 		char ledtext[2];      // String mit maximal 1 zeichen 
