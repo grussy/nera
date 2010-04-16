@@ -47,17 +47,22 @@ void identify_command()
 		set_cursor(0,2);
 		lcd_string(lcdtext);
 	}
-		else if	( strcmp( command, "CLK" ) == 0 )
+	else if	( strcmp( command, "LCDINIT" ) == 0 )
+	{
+		lcd_init();
+		uart_puts(command);
+	}
+	else if	( strcmp( command, "CLK" ) == 0 )
 	{
 		segmentDataClk();
 		uart_puts(command);
 	}
-		else if	( strcmp( command, "STR" ) == 0 )
+	else if	( strcmp( command, "STR" ) == 0 )
 	{
 		segmentStorageClk();
 		uart_puts(command);
 	}
-		else if	( strcmp( command, "7" ) == 0 )
+	else if	( strcmp( command, "7" ) == 0 )
 	{
 		uart_puts("Type a number < 10...\n");
 		char ledtext[2];      // String mit maximal 1 zeichen 

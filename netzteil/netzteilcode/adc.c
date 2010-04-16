@@ -62,7 +62,7 @@ void setdac(int value){
 	value=(value & 0x300)>>8; // mask out 2 msb bits and shift by 6
 	// F3=11110011
 	// FC=11111100
-	PORTC=(PORTC & 0xFC)|value; // change PC2 and PC3 only
+	PORTA=(PORTA & 0xFC)|value; // change PA0 and PA1 only
 }
 
 void init_ADC(void)

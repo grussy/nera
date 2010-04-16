@@ -26,21 +26,25 @@ int main(void)
 	// Initialize ADC / DAC .....................................
 	init_ADC();
 	DDRB = 0xFF; //DAC Pins
-	DDRC |= (1<<PC0) | (1<<PC1); // DAC Pins
+	DDRA |= (1<<PA0) | (1<<PA1); // DAC Pins
 	//...........................................................
 
 	// Initialize Drehgeber .....................................
 	int32_t drehgeber = 0;
-	DDRD &= ~((1<<DDD3) | (1<<DDD2)); // Set PORTD Pins 2 and 3 as input (external interupt pins)
-	PORTD |= (1<<PD3) | (1<<PD2); // Internal pullups
-	encode_init();	
+	DDRC &= ~((1<<DDC7) | (1<<DDC6)); // Set PORTC Pins 6 and 7 as input
+	PORTC |= (1<<PC7) | (1<<PC6); // Internal pullups
+	encode_init();
 	//...........................................................
 
 
 
-	DDRD |= ( 1 << PD5 ); // LED
+	//DDRD |= ( 1 << PD5 ); // LED
+	lcd_string("hallo");
 	
-	
+	//Light up both LEDS
+	DDRA |= (1<<PA7) | (1<<PA6);
+	PORTA |= (1<<PA7) | (1<<PA6);
+
 	// Everything initialized enable Interrupts now
 	sei();
 
