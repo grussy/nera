@@ -21,9 +21,9 @@ void set_cursor(uint8_t x, uint8_t y);
  
 // Pinbelegung für das LCD, an verwendete Pins anpassen
  
-#define LCD_PORT      PORTA
-#define LCD_DDR       DDRA
-#define LCD_RS        PD4
-#define LCD_EN        PD7
+#define LCD_PORT      PORTD
+#define LCD_DDR       DDRD
+#define LCD_RS        PD2
+#define LCD_EN        PD3
 #define EN_PORT	      PORTD	
 // DB4 bis DB7 des LCD sind mit PD0 bis PD3 des AVR verbunden 
