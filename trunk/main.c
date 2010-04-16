@@ -178,8 +178,10 @@ unsigned char t=0;
 int main(void)
 {
 	
-	DDRA |= (1<<PA0) | (1<<PA1);
-	PORTA |= (1<<PA0) | (1<<PA1);
+	DDRA |= (1<<PA7) | (1<<PA6);
+	PORTA |= (1<<PA7) | (1<<PA6);
+
+
 
 
 	char buffer [20];
