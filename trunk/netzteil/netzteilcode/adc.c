@@ -4,41 +4,62 @@
 #include "uart.h"
 #include <avr/io.h>
 
-volatile int adc = 0;
-volatile int adc_ready = 1;
-volatile long adc_middle = 0;
-volatile int adc_numbers = 0;
-volatile int dac = 500;
+volatile int adc_u = 0;
+volatile long adc_middle_u = 0;
+volatile int adc_numbers_u = 0;
+
+volatile int adc_i = 0;
+volatile long adc_middle_i = 0;
+volatile int adc_numbers_i = 0;
+
+volatile int dac = 0;
 volatile long voltage = 0;
+volatile long current = 0;
 volatile int countoverflows = 0;
 
 ISR(ADC_vect)
 {
-	//adc = ADC;
-	//adc_ready = 1;
-	adc_middle = adc_middle + ADC;
-	adc_numbers++;
+	if (ADMUX & (1<<MUX0)) // We just measured the Current
+	{
+		adc_middle_i = adc_middle_i + ADC;
+		adc_numbers_i++;
+		ADMUX &= ~(1<<MUX0);
+	}
+	else					// Just measured the Voltage
+	{
+		adc_middle_u = adc_middle_u + ADC;
+		adc_numbers_u++;
+		ADMUX |= (1<<MUX0);
+	}
+
+	ADCSRA |= (1<<ADSC); // Start new ADConversion
 }
 
 ISR( TIMER2_COMP_vect )				// 1ms for manual movement
 {
-	if (countoverflows == 5)
+	if (1)
 	{
-		if (adc_numbers)
+		if (adc_numbers_u)			//Voltage Mittelwert bilden
 		{
-			adc = adc_middle / adc_numbers;
-			adc_middle = 0;
-			adc_numbers = 0;
+			adc_u = adc_middle_u / adc_numbers_u;
+			adc_middle_u = 0;
+			adc_numbers_u = 0;
+		}
+		if (adc_numbers_i)			//Current Mittelwert bilden
+		{
+			adc_i = adc_middle_i / adc_numbers_i;
+			adc_middle_i = 0;
+			adc_numbers_i = 0;
 		}
 		long abstand = getadc_Volts() - voltage;
 
 		if (abs(abstand) > 1)
 		{
-			if (abstand > 1)
+			if (abstand > 1 && dac > 0)
 			{
 				setdac(dac - 1);
 			}
-			else
+			else if(dac < DACMAXINC)
 			{
 				setdac(dac + 1);
 			}
@@ -50,7 +71,7 @@ ISR( TIMER2_COMP_vect )				// 1ms for manual movement
 		countoverflows++;
 		char buffer [20];
 		sprintf(buffer,"%i",countoverflows);
-		uart_puts(buffer);
+		//uart_puts(buffer);
 		}
 
 }
@@ -74,27 +95,33 @@ void init_ADC(void)
 	OCR2 = 255;	//
 	TIMSK |= 1<<OCIE2;
 
+	ADCSRA |= (1<<ADSC); // Start ADConversion
+
 }
 
-int getadc(void)
+int getadc_u(void)
 {
-	return adc;
+	return adc_u;
 }
 
-int getadc_ready(void)
+int getadc_i(void)
 {
-	return adc_ready;
-}
-void setadc_ready(int ready)
-{
-	adc_ready = ready;
+	return adc_i;
 }
 
 long getadc_Volts(void)
 {
 	long out;
-	out = adc * (long)ADCMAXVOL;
+	out = adc_u * (long)ADCMAXVOL;
 	out = out / (long)ADCMAXINC;
+	return out;
+}
+
+long getadc_Current(void)
+{
+	long out;
+	out = adc_i * (long)ADCMAXCUR;
+	out = out / (long)ADCMAXCURINC;
 	return out;
 }
 
@@ -108,3 +135,12 @@ long getVoltage(void)
 	return voltage;
 }
 
+void setCurrent(long current100)
+{
+	current = current100;
+}
+
+long getCurrent(void)
+{
+	return current;
+}
