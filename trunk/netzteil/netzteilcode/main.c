@@ -24,7 +24,7 @@ int main(void)
 	//...........................................................
 
 	// Initialize LCD............................................
-	lcd_init();
+	//lcd_init(); LCD ist Kaputt
 	//...........................................................
 
 	// Initialize ADC / DAC .....................................
@@ -44,7 +44,7 @@ int main(void)
 
 
 	//DDRD |= ( 1 << PD5 ); // LED
-	lcd_string("hallo");
+	//lcd_string("hallo");
 	
 	//Light up both LEDS
 	DDRA |= (1<<PA7) | (1<<PA6);
@@ -64,11 +64,12 @@ int main(void)
 		int test = encode_read4();
 		int test2 = encode_read2();
 
-		if(test)
+
+		if(test | test2)
 		{
 			//int test = encode_read4();
-			sprintf(buffer, "test %i \n", test);
-			uart_puts(buffer);
+			//sprintf(buffer, "test %i \n", test);
+			//uart_puts(buffer);
 			if (test > 1) test = 100;
 			if (test < -1) test = -100;
 
@@ -78,17 +79,18 @@ int main(void)
 			if (soll_voltage > VOLTAGE_MAX) soll_voltage = VOLTAGE_MAX; // nicht größer als das Maximum
 			setVoltage((long)soll_voltage);
 			//setdac(drehgeber);
-			long voltagesoll = getVoltage();
+			//long voltagesoll = getVoltage();
 			long voltageist = getadc_Volts();
-			sprintf(buffer, "U: %li,%li[%li,%li] V       ", voltagesoll / 100, voltagesoll % 100, voltageist / 100, voltageist % 100);
-			set_cursor(0,1);
-			lcd_string(buffer);
-		}
+			sprintf(buffer, "U: %li,%li[%li,%li] V       \n", soll_voltage / 100, soll_voltage % 100, voltageist / 100, voltageist % 100);
+			//set_cursor(0,1);
+			//lcd_string(buffer);
+			uart_puts(buffer);
+		//}
 
 
 
-		if(test2)
-		{
+		//if(test2)
+		//{
 			//int test2 = encode_read2();
 			if (test2 > 1) test2 = 100;
 			if (test2 < -1) test2 = -100;
@@ -99,12 +101,13 @@ int main(void)
 			if (soll_current > CURRENT_MAX) soll_current = CURRENT_MAX; // nicht größer als das Maximum
 			setCurrent((long)soll_current);
 			//setdac(drehgeber);*/
-			long currentsoll = getCurrent();
+			//long currentsoll = getCurrent();
 			long currentist = getadc_Current();
 
-			sprintf(buffer2, "I: %li,%li[%li,%li] A       ", currentsoll / 100, currentsoll % 100, currentist / 100, currentist % 100);
-			set_cursor(0,2);
-			lcd_string(buffer2);
+			sprintf(buffer2, "I: %li,%li[%li,%li] A       \n", soll_current / 100, soll_current % 100, currentist / 100, currentist % 100);
+			//set_cursor(0,2);
+			//lcd_string(buffer2);
+			uart_puts(buffer2);
 		}
 	}
 }

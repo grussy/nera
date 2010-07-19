@@ -103,7 +103,7 @@ int main(void)
 				case 1:	
 					if (steps > 0) {
 						steps--;
-					} else if (steps == 0) {
+					} else if (steps <= 0) {
 						steps--;
 						running = 0;
 						break;

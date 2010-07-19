@@ -1,15 +1,15 @@
 <!DOCTYPE KontrollerLab>
 <PROJECT VERSION="0.8.0-beta1" >
   <FILES>
-    <FILE VIEWS="0,0,1280,865,5," SHOWN="TRUE" NAME="main.c" />
-    <FILE VIEWS="29,52,1280,865,4," SHOWN="TRUE" NAME="uart.c" />
-    <FILE VIEWS="54,77,1120,767,4," SHOWN="TRUE" NAME="uart.h" />
-    <FILE VIEWS="79,102,1024,719,4," SHOWN="TRUE" NAME="commands.h" />
-    <FILE VIEWS="104,127,1024,719,4," SHOWN="TRUE" NAME="commands.c" />
-    <FILE VIEWS="129,152,1024,761,4," SHOWN="TRUE" NAME="lcd.h" />
-    <FILE VIEWS="154,177,1024,788,4," SHOWN="TRUE" NAME="lcd.c" />
-    <FILE VIEWS="179,202,1024,788,4," SHOWN="TRUE" NAME="segment.c" />
-    <FILE VIEWS="204,227,1024,788,4," SHOWN="TRUE" NAME="segment.h" />
+    <FILE VIEWS="0,0,1115,727,5," SHOWN="TRUE" NAME="main.c" />
+    <FILE VIEWS="29,52,1115,133,4," SHOWN="TRUE" NAME="uart.c" />
+    <FILE VIEWS="54,77,1280,865,4," SHOWN="TRUE" NAME="uart.h" />
+    <FILE VIEWS="79,102,1120,767,4," SHOWN="TRUE" NAME="commands.h" />
+    <FILE VIEWS="104,27,1024,719,4," SHOWN="TRUE" NAME="commands.c" />
+    <FILE VIEWS="129,52,1024,719,4," SHOWN="TRUE" NAME="lcd.h" />
+    <FILE VIEWS="154,77,1024,761,4," SHOWN="TRUE" NAME="lcd.c" />
+    <FILE VIEWS="179,102,1024,788,4," SHOWN="TRUE" NAME="segment.c" />
+    <FILE VIEWS="204,27,1024,788,4," SHOWN="TRUE" NAME="segment.h" />
   </FILES>
   <SETTINGS>
     <ASSEMBLER_COMMAND VALUE="avr-gcc" />

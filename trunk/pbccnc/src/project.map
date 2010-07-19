@@ -91,7 +91,6 @@ LOAD /usr/lib/gcc/avr/4.3.3/../../../avr/lib/avr5/crtm32.o
 LOAD main.o
 LOAD motor.o
 LOAD usart.o
-LOAD copy_2_main.o
 LOAD /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a
 LOAD /usr/lib/gcc/avr/4.3.3/../../../avr/lib/avr5/libc.a
 LOAD /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a
@@ -287,7 +286,6 @@ LOAD /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a
                 0x00000cb4                uart_puts
                 0x00000c96                USART_Init
                 0x00000ca8                uart_putc
- .text          0x00000cc8        0x0 copy_2_main.o
  .text          0x00000cc8        0x0 /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a(_udivmodhi4.o)
  .text          0x00000cc8        0x0 /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a(_divmodhi4.o)
  .text          0x00000cc8        0x0 /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a(_exit.o)
@@ -391,7 +389,6 @@ LOAD /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a
  .data          0x00800060      0x617 main.o
  .data          0x00800677        0x0 motor.o
  .data          0x00800677        0x0 usart.o
- .data          0x00800677        0x0 copy_2_main.o
  .data          0x00800677        0x0 /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a(_udivmodhi4.o)
  .data          0x00800677        0x0 /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a(_divmodhi4.o)
  .data          0x00800677        0x0 /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a(_exit.o)
@@ -438,7 +435,6 @@ LOAD /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a
  .bss           0x00800778        0x0 main.o
  .bss           0x00800778        0x0 motor.o
  .bss           0x00800778        0x0 usart.o
- .bss           0x00800778        0x0 copy_2_main.o
  .bss           0x00800778        0x0 /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a(_udivmodhi4.o)
  .bss           0x00800778        0x0 /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a(_divmodhi4.o)
  .bss           0x00800778        0x0 /usr/lib/gcc/avr/4.3.3/avr5/libgcc.a(_exit.o)
