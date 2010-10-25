@@ -1,6 +1,17 @@
-%%This is a very basic article template.
-%%There is just one section and two subsections.
-\documentclass{article}
+\documentclass[12pt]{article}
+\usepackage[paper=a4paper,left=30mm,right=30mm,top=35mm,bottom =35mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{stmaryrd}
+\usepackage{setspace}
+\usepackage{mathrsfs}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage[dvips,unicode,colorlinks,linkcolor=black]{hyperref} 
+\usepackage{graphicx}
+\usepackage{float}
 
 \begin{document}
 \begin{titlepage}
@@ -11,9 +22,9 @@
 \tableofcontents
 \end{titlepage} 
 
-\section{Vorlesung}
 
 \section{Wissenschaftliches Arbeiten - Gero Becker 18.10.10}
+
 \subsection*{Vorgehensweise}
 \begin{itemize}
   \item Frage- und Problemstellung erfassen und definieren
@@ -21,8 +32,96 @@
   \item Arbeitshypothese formulieren
   \item Material und Methoden wählen
 \end{itemize}
-\subsection*{Aufbau}
 
+\subsection*{Aufbau}
+\begin{itemize}
+ \item Einleitung
+\begin{itemize}
+ \item Problemstellung
+\item Relevanz und Rechtfertigung um der Fragestellung nachzugehen
+\item Forschungsstand: Welche Arbeiten gibt es schon darüber
+\item Aus dem Forschungsstand Forschungsbedarf ableiten
+\item Ziele aus den Arbeitsschritten ableiten
+\begin{itemize}
+ \item Arbeit und Material auf die Ziele auslegen
+\end{itemize}
+\end{itemize}
+\item Material und Methoden
+\begin{itemize}
+ \item Welcher Forschungsansatz ist geeignet um die Arbeitshypothese zu formulieren
+\item Welche Methoden stehen zur Verfügung?
+\item Welches Material wird für die Beantwortung der Fragestellung benötigt?
+\end{itemize}
+\item Ergebnisse und Diskussion
+\begin{itemize}
+ \item Erkenntnisse mit anderen Forschungen vergleichen und bewerten.
+\end{itemize}
+\item Ausblick
+\begin{itemize}
+ \item Welche neuen Forschungsfragen ergeben sich aus der Arbeit?
+\item Welche Arbeitsfelder sollte man noch einmal genauer untersuchen?
+\end{itemize}
+\end{itemize}
+
+\subsection*{Beispiel Kahlschlagsfläche}
+\begin{itemize}
+ \item Problemstellung: Kahlschlagsfläche
+ \item Problemdefinition: Flächige Befahrung (Bodenverdichtung); Erosion; Verjüngung; Ästhetik
+\end{itemize}
+
+\subsection*{Forschungsfragen und wissensbasierte Lösungen für die Forst- und Holzkette}
+\subsubsection*{Beispiel Feinerschließung}
+\begin{itemize}
+ \item Walderschließung: Entwicklung und Praxiserprobung einer Testreihe zur Lokalisierung bodenmechanisch vorbelasteter Bodenareale
+       von Forststandorten und die Einbeziehung dieser Fahrlinien in zukünftige Konzepte der Waldpflege und Holzernte.
+\begin{itemize}
+ \item Feinerschließungsnetz ist: Arbeitsort für Maschinen, Wirtschaftlichkeit, Waldbau, Bodenschutz und Bestandespfleglichkeit
+ \item Maschinen auf dem Waldboden führen zu Bodenverdichtung, Wurzelschäden oder Schäden an Bäumen
+ \item Diese Schäden können durch Maßnahmen verringert werden: Befahrung extrem trockener oder durchgefrorener Böden.
+ \item Trotzdem besteht ein Verletzungsrisiko und man sollte deshalb diese Schäden auf bestimmte Flächen konzentrieren (Rückegassen).
+ \item Diese Flächen sollten auch nicht ständig wechseln, sondern immer die gleichen Flächen betreffen
+\end{itemize}
+\item Problem: Risiko Waldboden
+\item Ziel: Rückegassen konzentrieren; alte Befahrungslinien erkennen (Methodenvergleich); Integration identifizierter Befahrungslinien in
+      zukunftsgerechte Erschließungssysteme unter standörtlichen und ökonomischen Gesichtspunkten. Erstellung eines Permanenten Feinerschließungsnetzes.
+\item Fragestellung: Wie erkenne ich auf den vorgegebenen Linien zu bleiben?
+                     Beurteilung Alternativen zur Erkennung alter Befahrungslinien (Lokalisierung im Gelände).
+\item Relevanz: Lösung für das Problem auch zu gewährleisten, müssen die Wege wieder gefunden werden. (Um Schäden zu vermeiden)
+\item Methoden: Witterungsbeständige Markierungen, Luftbilder, alte Nutzungskarten/ Pläne, Bodenvegetation (Verdichtungszeiger),
+      Bodenproben nehmen, Laserscan (Fahrspuren erkennen anhand Wellenlängenresonanz; Waldboden optisch abtasten), Interviews mit
+      Waldarbeitern, Förstern etc., Ortsbegang GPS
+\item Forschungsstand klären: 
+\begin{itemize}
+ \item Mit dem Problem suchen: Fachlicher Zugang
+ \item Methoden wählen und Problem darüber suchen: methodischer Ansatz
+ \item Aufgrund der Literatur Methoden abschätzen
+\end{itemize}
+\item Forschungsansatz:
+\begin{itemize}
+ \item Vergleichsfläche von der man die genaue Lage der Wege kennt um die Methoden zu testen.
+ \item Methoden nach Aufwand sortieren und bewerten
+ \item Über die Vergleichsfläche kann man Methoden verifizieren und falsifizieren
+\end{itemize}
+\item Ergebnisse und Diskussion
+\begin{itemize}
+ \item Man wendet die Methoden an und legt diese übereinander
+ \item Durch den Vergleich der verschiedenen Verfahren erhält man die Genauigkeit der Messmethode
+ \item Bewertungskriterium: Genauigkeit und Vollständigkeit 
+ \item Methode an unterschiedlichen Beständen testen:
+\begin{itemize}
+ \item Alt/Jung; Ebene/Hang; Laubholz/Nadelholz => Keine frischen Erntemaßnahmen und mit Testflächen
+ \item Um unterschiedliche Methodegenauigkeiten festzustellen
+ \item Für statistische Genauigkeit Wiederholungen 
+\end{itemize}
+ \item Zuverlässigkeit der Methode als Ergebnis und des Aufwandes
+ \item Bewertung der Ergebnisse für Praktikabilität, Vernünftigkeit, Kosten, Zeitaufwand etc. 
+ \item Erkennungsmöglichkeiten alter Befahrungslinien durch GPS-Aufnahme am genauesten
+\end{itemize}
+\item Ausblick: Optimierung/Umstrukturierung und Neuerschließung der Waldwege. (Integration alter Befahrungslinien.
+\end{itemize}
+
+\subsection*{Integrierende Optimierungsansätze für eine nachhaltige Energieholzversorgung}
+\subsubsection*{Beispiel Bioenergie}
 
 
 \end{document}
