@@ -1,0 +1,57 @@
+[General]
+def_graphic_ext=eps
+img_extIsRegExp=false
+img_extensions=.eps .jpg .jpeg .png .pdf .ps .fig .gif
+kileprversion=2
+kileversion=2.0.85
+lastDocument=
+masterDocument=
+name=erstes semester
+pkg_extIsRegExp=false
+pkg_extensions=.cls .sty .bbx .cbx .lbx
+src_extIsRegExp=false
+src_extensions=.tex .ltx .latex .dtx .ins
+
+[Tools]
+MakeIndex=
+QuickBuild=
+
+[item:Waldnutzung und Naturschutz/Literatur/RolfGrammelForstbenutzung/forstbenutzung.tex]
+archive=true
+column=0
+encoding=
+highlight=
+line=0
+mode=
+open=true
+order=-1
+
+[item:Waldnutzung und Naturschutz/Literatur/Waldeigentum/waldeigentum.tex]
+archive=true
+column=1766600570
+encoding=
+highlight=
+line=0
+mode=
+open=false
+order=-1
+
+[item:Waldnutzung und Naturschutz/Vorlesung/Vorlesung.tex]
+archive=true
+column=1867919226
+encoding=
+highlight=
+line=0
+mode=
+open=false
+order=-1
+
+[item:erstessemester.kilepr]
+archive=true
+column=0
+encoding=
+highlight=
+line=0
+mode=
+open=false
+order=-1
