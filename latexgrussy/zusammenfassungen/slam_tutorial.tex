@@ -1,0 +1,133 @@
+\documentclass[12pt]{article}
+\usepackage[paper=a4paper,left=30mm,right=30mm,top=35mm,bottom=35mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{stmaryrd}
+\usepackage{setspace}
+\usepackage{mathrsfs}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage[dvips,unicode,colorlinks,linkcolor=black]{hyperref} 
+\usepackage{graphicx}
+\usepackage{float}
+
+\pagestyle{fancy}
+\lfoot{}
+\rfoot{}
+\cfoot{\thepage}
+\fancyhead[L]{}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\footrulewidth}{0.6pt}
+\setlength{\headheight}{16pt}
+\setlength{\parindent}{0pt}
+% Für die Wahl der Schriftart
+\newcommand{\changefont}[3]{
+\fontfamily{#1} \fontseries{#2} \fontshape{#3} \selectfont}
+
+%\renewcommand{\vec}[1]{\mathbf{#1}}
+\renewcommand*\vec[1]{{\mbox{\boldmath\ensuremath{#1}}}}
+
+\begin{document}
+% keine Hurenkinder und Schusterjungen
+\clubpenalty = 10000
+\widowpenalty = 10000 
+\displaywidowpenalty = 10000
+
+\onehalfspacing
+% Schriftart
+\changefont{ptm}{m}{n} 
+
+\begin{titlepage}
+\author{}
+\title{Zusammenfassung: A Tutorial on Graph-Based SLAM}
+\date{\today} 
+\maketitle
+\thispagestyle{empty}
+\end{titlepage}
+
+
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+\pagenumbering{arabic}
+
+\section{Introduction}
+SLAM (simultaneous localization and mapping) bietet eine Alternative zur Verwendung von Systemen wie GPS, vor allem wenn solche Systeme nicht
+verfügbar sind. The bestehenden Ansätze lassen sich in die zwei Klassen \textit{filtering} und \textit{smoothing} unterteilen.
+Ein intuitiver Weg solch ein SLAM Problem anzugehen ist die sogenannte ``graph-based formulation''. Hierzu wird ein Graph erstellt, dessen
+Stützstellen Posen (also Ort und Raumwinkel des Roboters zu bestimmten Zeiten) darstellen und die Verbindungen der Stützstellen durch Sensordaten
+aufgestellte Zwangsbedingungen beschreiben. Diese Zwangsbedingungen sind nicht zwingend eindeutig da die Messdaten von einem Rauschen überlagert
+sind.
+
+Ist ein solcher Graph gefunden, gilt es die Konfiguration der Stützstellen zu finden die am besten zu den durch die Messungen gegebenen
+Zwangsbedingungen passt. Die hierfür benötigten Minimierungslösungen sind sehr Komplex, weshalb diese Methode einige Zeit gebraucht hat sich zu 
+etablieren.
+
+\subsection{Filtering}
+\textit{Filtering} ist eine live Zustandsberechnung, wobei der Zustand aus der aktuellen Roboterposition und der Karte besteht. Die Berechnung
+wird durch das Aufnehmen weiterer Daten immer weiter verbessert. Die Filtering Methoden werden als on-line SLAM Methoden bezeichnet um ihre
+``wachsende'' Natur zu unterstreichen.
+
+\subsection{Smoothing}
+Die \textit{smoothing} Ansätze verwenden im Gegensatz zu den \textit{filtering} Ansätzen den Kompletten Datensatz an Karten und 
+Positionsinformationen. Diese Ansätze behandeln das sogenannte ``full SLAM problem''. Typischerweise werden hier Minimierungstechniken wie die
+Methode der kleinsten Quadrate verwendet.
+
+\section{Probabilistic formulation of SLAM}
+Die Lösung des SLAM Problems besteht darin, die Robotertrajektorie und die Karte der Umgebung zu berechnen während der Roboter sich in ihr bewegt.
+Wegen dem starken Rauschen der Sensoren wird das SLAM Problem meistens mit wahrscheinlichkeitstheoretischen Mitteln behandelt. Man nimmt an der
+Roboter bewegt sich entlang einer Trajektorie welche durch eine Reihe von zufälligen Variablen beschrieben wird
+$\vec x_{1:T} = \left\{\vec x_1,...,\vec x_T\right\}$. Während dieser Bewegung nimmt der Roboter eine Reihe von odometrischen Daten
+$\vec u_{1:T} = \left\{\vec u_1,...,\vec u_T\right\}$ und Bilder der Umgebung $\vec z_{1:T} = \left\{\vec z_1,...,\vec z_T\right\}$.
+\\
+Die Lösung des ``full SLAM'' Problems besteht nun darin die bedingte Wahrscheinlichkeit der Robotertrajektorie $\vec x_{1:T}$ und Karte $\vec m$ aus
+gegebenen Messdaten und einer Anfangsposition $x_o$ zu Berechnen:
+\begin{align}
+ \label{posterior}
+ p\left(\vec x_{1:T},\vec m|\vec z_{1:T}, \vec u_{1:T}, \vec x_0\right)
+\end{align}
+Die Anfangsposition $\vec x_0$ definiert die Position der Karte und ist beliebig wählbar. Die Roboterposen und odometrischen Daten werden 
+generell als 2D oder 3D Transformationen in den Euklidischen Gruppe SE(2) bzw. SE(3) dargestellt. Für Darstellung der Karte bestehen diverse
+Möglichkeiten. Die Wahl der Darstellung hängt von Faktoren wie den Benutzen Sensoren, der Art der Umgebung oder dem Berechnungsalgorithmus ab.
+Unabhängig von der Wahl der Darstellung definiert sich die Karte durch die Messungen und die Orte an denen die Messungen erlangt wurden.
+\\
+Da die Berechnung der bedingten Wahrscheinlichkeit (\ref{posterior}) Arbeiten in hochdimensionalen Zustandsräumen umfasst, ist diese nur durch
+die wohldefinierte Struktur des SLAM Problems zu lösen. Diese Struktur basiert auf der Annahme einer fixen Welt, und der Markov
+Annahme\footnote{Die Eigenschaften jedes Zustands werden nur von den Eigenschaften des unmittelbar vorausgegangenen Zustands beeinflusst.}.
+
+\subsection{Dynamic Bayesian network (DBN)}
+Die Struktur des SLAM Problems kann mit einem DBN, einem grafischen Modell, welches einen stochastischen Prozess mittels eines gerichteten Graphen
+beschreibt, behandelt werden. Der Graph enthält Knoten welche $\vec x_{1:T}$, $\vec u_{1:T}$, $\vec z_{1:T}$ und $\vec m$ repräsentieren. Die
+Verbindungen der Knoten folgen einem periodischen Prinzip, welches von dem Zustandsübergangsmodell und dem Beobachtungsmodell charakterisiert wird.
+Das SLAM Problem als DBN darzustellen betont seine zeitabhängige Struktur und zeigt, dass dieser Formalismus hervorragend geeignet ist um 
+\textit{filtering} Prozesse zu beschreiben die verwendet werden können um SLAM Probleme anzugehen.
+
+\subsubsection{Zustandsübergangsmodell}
+Das Zustandsübergangsmodell $p\left(\vec x_t |\vec x_{t-1}, \vec u_t\right)$ wird von zwei Linien repräsentiert welche zu $\vec x_t$ führen und
+stellt die Wahrscheinlichkeit, dass der Roboter sich zur Zeit $t$ in $\vec x_t$ befindet dar. Vorausgesetzt der Roboter hat sich zur Zeit $t-1$ am
+Ort $\vec x_{t-1}$ befunden und unterwegs die odometrische Messung $\vec u_t$ erlangt.
+
+\subsubsection{Beobachtungsmodell}
+Das Beobachtungsmodell $p\left(\vec z_t|\vec x_t, m_t\right)$ beschreibt die Wahrscheinlichkeit, dass der Roboter die Beobachtung $\vec z_t$
+macht, sofern er sich am Ort $\vec x_t$ in der Karte befindet. Dargestellt wird das Modell Durch Pfeile die auf $\vec z_t$ zeigen. Die Beobachtung
+$\vec z_t$ hängt nur von der gegenwärtigen Postion $\vec x_t$ und der statischen Karte $\vec m$ ab.
+
+\subsection{Graph-based SLAM}
+Eine Alternative zum DBN bietet die \textit{Graph-based} Formulierung des SLAM Problems. Hier werden die Posen des Roboters durch Knoten im Graphen
+dargestellt und mit der entsprechenden Position in der Umgebung beschriftet. Räumliche Zwangsbedingungen zwischen den Posen welche aus Beobachtungen
+$\vec z_t$ oder odometrischen Messungen $\vec u_t$ resultieren werden durch Verbindungslinien zwischen den Knoten im Graphen dargestellt. Eine solche
+Zwangsbedingung besteht aus der Wahrscheinlichkeitsverteilung über der relativen Transformation zwischen den zwei Posen. Ist ein solcher Graph konstruiert
+so wird versucht die Konstellation von Posen zu finden unter der die Zwangsbedingungen zwischen den Posen am besten erfüllt sind.
+
+\subsubsection{Frontend}
+Die Erstellung des Graphen bezeichnet man üblicherweise als \textit{frontend} oder \textit{graph construction}. Der Graph wird aus den rohen Messdaten
+der Sensoren erzeugt.
+Diese kommen entweder von odometrischen Messungen oder durch ausfluchten bzw. abstimmen der Beobachtungen welche an den zwei Punkten gemacht wurden.
+
+\subsubsection{Backend}
+Die Optimierung des Graphen wird als \textit{backend} oder \textit{graph optimization} bezeichnet. Die Optimierung hängt nicht vom verwendeten Sensor
+ab, sonder nur von der abstrakten Darstellung der Daten.
+
+\end{document}
