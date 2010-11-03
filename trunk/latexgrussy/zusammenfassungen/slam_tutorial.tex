@@ -82,6 +82,7 @@ Roboter bewegt sich entlang einer Trajektorie welche durch eine Reihe von zufäl
 $\vec x_{1:T} = \left\{\vec x_1,...,\vec x_T\right\}$. Während dieser Bewegung nimmt der Roboter eine Reihe von odometrischen Daten
 $\vec u_{1:T} = \left\{\vec u_1,...,\vec u_T\right\}$ und Bilder der Umgebung $\vec z_{1:T} = \left\{\vec z_1,...,\vec z_T\right\}$.
 \\
+
 Die Lösung des ``full SLAM'' Problems besteht nun darin die bedingte Wahrscheinlichkeit der Robotertrajektorie $\vec x_{1:T}$ und Karte $\vec m$ aus
 gegebenen Messdaten und einer Anfangsposition $x_o$ zu Berechnen:
 \begin{align}
@@ -93,6 +94,7 @@ generell als 2D oder 3D Transformationen in den Euklidischen Gruppe SE(2) bzw. S
 Möglichkeiten. Die Wahl der Darstellung hängt von Faktoren wie den Benutzen Sensoren, der Art der Umgebung oder dem Berechnungsalgorithmus ab.
 Unabhängig von der Wahl der Darstellung definiert sich die Karte durch die Messungen und die Orte an denen die Messungen erlangt wurden.
 \\
+
 Da die Berechnung der bedingten Wahrscheinlichkeit (\ref{posterior}) Arbeiten in hochdimensionalen Zustandsräumen umfasst, ist diese nur durch
 die wohldefinierte Struktur des SLAM Problems zu lösen. Diese Struktur basiert auf der Annahme einer fixen Welt, und der Markov
 Annahme\footnote{Die Eigenschaften jedes Zustands werden nur von den Eigenschaften des unmittelbar vorausgegangenen Zustands beeinflusst.}.
@@ -129,5 +131,24 @@ Diese kommen entweder von odometrischen Messungen oder durch ausfluchten bzw. ab
 \subsubsection{Backend}
 Die Optimierung des Graphen wird als \textit{backend} oder \textit{graph optimization} bezeichnet. Die Optimierung hängt nicht vom verwendeten Sensor
 ab, sonder nur von der abstrakten Darstellung der Daten.
+
+\section{Graph-based SLAM}
+Die Messdaten werden durch die Verbindungen im Graph dargestellt und können als ``virtuelle Messungen'' angesehen werden. Genauer repräsentiert die
+Verbindung zweier Posen eine Wahrscheinlichkeitsverteilung über den relativen Orten der Posen im Bezug auf ihre gegenseitige Messungen. Allgemein ist
+das Beobachtungsmodell $p\left(\vec z_t|\vec x_t, m_t\right)$ moltimodal weswegen die Annahme einer Gaussverteilung nicht zutrifft. Dies bedeutet, 
+dass eine einzelne Beobachtung $\vec z_t$ mehrere potentielle Verbindungen zwischen verschiedenen Posen darstellen könnte. Deshalb müssen die Gesamtheit 
+der Verbindungen im Graph selbst als Wahrscheinlichkeitsverteilung beschrieben werden. Eine direkte Behandlung der Multimodalität würde zu einer 
+kombinatorischen Explosion der Komplexität führen. Aus diesem Grund schätzt man meistens die Wahrscheinlichste Topologie ab, man muss also die 
+Zwangsbedingung bestimmen die am wahrscheinlichsten aus einer Beobachtung resultiert. Diese Entscheidung basiert auf der Wahrscheinlichkeitsverteilung über
+den Roboterposen. Bekannt ist dieses Problem unter dem Namen \textit{data association} und wird normalerweise vom Frontend durchgeführt. Um die richtige
+\textit{data association} zu berechnen muss dem Frontend eine konsistente Abschätzung der unbedingten Wahrscheinlichkeit über der Robotertrajektorie
+$p\left(\vec x_{1:T}|\vec z_{1:T}, \vec u_{1:T}\right)$ gegeben sein. Dies erfordert eine Verschachtelung der Ausführung von Frontend und Backend während
+der Roboter die Umgebung erkundet. Weswegen die Genauigkeit und Geschwindigkeit des Backends für eine gutes SLAM System ausschlaggebend ist.
+\\
+
+Sind die Beobachtungen von Gaußverteiltem Rauschen überlagert und die \textit{data association} bekannt, ist das Ziel des Algorithmus die Anpassung einer
+Gaußverteilung an die bedingte Wahrscheinlichkeitsverteilung der Robotertrajektorie. Dies beinhaltet die Berechnung des Erwartungswerts dieser 
+Gaussverteilung als Konfiguration der Knoten die die Wahrscheinlichkeit der Beobachtungen maximiert.
+
 
 \end{document}
